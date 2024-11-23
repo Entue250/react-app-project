@@ -200,23 +200,42 @@ function App() {
       });
   };
 
+  const addUser = () => {
+    const originalUsers = [...users];
+    const newUser = { id: 0, name: "Eduard" };
+    setUsers([newUser, ...users]);
+
+    axios
+      .post("https://jsonplaceholder.typicode.com/users/", newUser)
+      .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
+      .catch((err) => {
+        setError(err.message);
+        setUsers(originalUsers);
+      });
+  };
+
   return (
-    <ul className="list-group">
-      {users.map((user) => (
-        <li
-          key={user.id}
-          className="list-group-item d-flex justify-content-between"
-        >
-          {user.name}
-          <button
-            className="btn btn-outline-danger"
-            onClick={() => deleteUser(user)}
+    <>
+      <button className="btn btn-primary mb-3" onClick={addUser}>
+        Add
+      </button>
+      <ul className="list-group">
+        {users.map((user) => (
+          <li
+            key={user.id}
+            className="list-group-item d-flex justify-content-between"
           >
-            Delete
-          </button>
-        </li>
-      ))}
-    </ul>
+            {user.name}
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => deleteUser(user)}
+            >
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 export default App;
